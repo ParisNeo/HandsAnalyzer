@@ -12,8 +12,8 @@ import cv2
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # Build a window
-cv2.namedWindow('Face Mesh', flags=cv2.WINDOW_NORMAL)
-cv2.resizeWindow('Face Mesh', (640,480))
+cv2.namedWindow('Hello hands', flags=cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Hello hands', (640,480))
 
 # Build face analyzer while specifying that we want to extract just a single face
 ha = HandsAnalyzer(max_nb_hands=3)
@@ -34,12 +34,13 @@ while cap.isOpened():
             hand.draw_landmarks(image, thickness=3)
             # Draw a bounding box
             hand.draw_bounding_box(image,text="left" if hand.is_left else "right")
+            # Find hand posture
             pos, ori = hand.get_hand_posture()
             if pos is not None:
                 hand.draw_reference_frame(image, pos, ori, origin=hand.get_landmark_pos(0))
     # Show the image
     try:
-        cv2.imshow('Face Mesh', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        cv2.imshow('Hello hands', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     except Exception as ex:
         print(ex)
     

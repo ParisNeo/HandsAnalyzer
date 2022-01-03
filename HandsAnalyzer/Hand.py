@@ -44,20 +44,20 @@ class Hand():
                         17
                     ]
     left_palm_reference_positions = np.array([
-                    [0,0,0],
-                    [50,0,0],
-                    [58,75,0],
-                    [39,78,0],
-                    [20,80,0],
-                    [0,80,0],
+                    [ 2.88227596e+02,  4.56106367e+02,  6.66031556e-04], 
+                    [ 3.75734406e+02,  4.59343414e+02, -5.17580843e+01], 
+                    [ 4.53219032e+02,  2.88406019e+02, -4.61197901e+01], 
+                    [ 4.06804848e+02,  2.50826311e+02, -4.32009506e+01], 
+                    [ 3.53973503e+02,  2.39915829e+02, -4.61195040e+01], 
+                    [ 2.96147976e+02,  2.49269457e+02, -5.35883236e+01],
                 ])
     right_palm_reference_positions = np.array([
-                    [0,0,0],
-                    [-50,0,0],
-                    [-58,75,0],
-                    [-39,78,0],
-                    [-20,80,0],
-                    [0,80,0],
+                    [ -2.88227596e+02,  4.56106367e+02,  6.66031556e-04], 
+                    [ -3.75734406e+02,  4.59343414e+02, -5.17580843e+01], 
+                    [ -4.53219032e+02,  2.88406019e+02, -4.61197901e+01], 
+                    [ -4.06804848e+02,  2.50826311e+02, -4.32009506e+01], 
+                    [ -3.53973503e+02,  2.39915829e+02, -4.61195040e+01], 
+                    [ -2.96147976e+02,  2.49269457e+02, -5.35883236e+01],
                 ])
 
     def __init__(self, is_left:bool=True, landmarks:NamedTuple = None, image_shape: tuple = (640, 480)):
@@ -244,19 +244,19 @@ class Hand():
 
         face_2d_positions = self.npLandmarks[self.palm_indices,:2]
         if self.is_left:
-            (success, face_ori, face_pos, _) = cv2.solvePnPRansac(
-                                                        self.left_palm_reference_positions.astype(np.float),
-                                                        face_2d_positions.astype(np.float), 
-                                                        camera_matrix, 
-                                                        dist_coeffs,
-                                                        flags=cv2.SOLVEPNP_ITERATIVE)
+                (success, face_ori, face_pos, _) = cv2.solvePnPRansac(
+                                                            self.left_palm_reference_positions.astype(np.float),
+                                                            face_2d_positions.astype(np.float), 
+                                                            camera_matrix, 
+                                                            dist_coeffs)#,
+                                                            #flags=cv2.SOLVEPNP_ITERATIVE)
         else:
-            (success, face_ori, face_pos, _) = cv2.solvePnPRansac(
-                                                        self.left_palm_reference_positions.astype(np.float),
-                                                        face_2d_positions.astype(np.float), 
-                                                        camera_matrix, 
-                                                        dist_coeffs,
-                                                        flags=cv2.SOLVEPNP_ITERATIVE)
+                (success, face_ori, face_pos, _) = cv2.solvePnPRansac(
+                                                            self.left_palm_reference_positions.astype(np.float),
+                                                            face_2d_positions.astype(np.float), 
+                                                            camera_matrix, 
+                                                            dist_coeffs)#,
+                                                            #flags=cv2.SOLVEPNP_ITERATIVE)
         if not success:
             return None, None
 

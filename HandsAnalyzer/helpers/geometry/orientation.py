@@ -8,7 +8,7 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
-def faceOrientation2Euler(r: np.ndarray, degrees:bool=True) -> np.ndarray:
+def orientation2Euler(r: np.ndarray, degrees:bool=True) -> np.ndarray:
     """Converts rodriguez representation of a rotation to euler angles
 
     Args:

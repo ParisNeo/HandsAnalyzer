@@ -60,6 +60,37 @@ class Hand():
                     [ -2.96147976e+02,  2.49269457e+02, -5.35883236e+01],
                 ])
 
+    # Fingers
+    thumb_landmark_indices = [
+        1,
+        2,
+        3,
+        4
+    ]
+    index_landmark_indices = [
+        5,
+        6,
+        7,
+        8
+    ]
+    middle_landmark_indices = [
+        9,
+        10,
+        11,
+        12
+    ]
+    ring_landmark_indices = [
+        13,
+        14,
+        15,
+        16
+    ]
+    pinky_landmark_indices = [
+        17,
+        18,
+        19,
+        20
+    ]
     def __init__(self, is_left:bool=True, landmarks:NamedTuple = None, image_shape: tuple = (640, 480)):
         """Creates an instance of Hand
 

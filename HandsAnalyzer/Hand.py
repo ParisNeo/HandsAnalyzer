@@ -342,6 +342,20 @@ class Hand():
         p2 = landmarks.max(axis=0)+np.array(margins[2:4])
         return image[int(p1[1]):int(p2[1]),int(p1[0]):int(p2[0])]
 
+    def annotate(self, image:np.ndarray, text:str, color:tuple=(255,0,0), thickness:int=1, pos:np.ndarray=None):
+        """Writes an annotation on top of the hand
+
+        Args:
+            image (np.ndarray): The image on which we will draw the bounding box
+            text (str) : the text to be displayed
+            color (tuple, optional): The color of the bounding box. Defaults to (255,0,0).
+            thickness (int, optional): The line thickness. Defaults to 1.
+        """
+        if pos is None:
+            pos = self.npLandmarks.min(axis=0)
+        cv2.putText(image, text, (int(pos[0]),int(pos[1]-20)),cv2.FONT_HERSHEY_SIMPLEX, 1, color, thickness)
+
+
     def draw_bounding_box(self, image:np.ndarray, color:tuple=(255,0,0), thickness:int=1, text=None):
         """Draws a bounding box around the hand
 

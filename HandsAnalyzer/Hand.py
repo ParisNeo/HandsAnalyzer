@@ -23,7 +23,7 @@ from scipy.spatial import Delaunay
 from scipy.spatial.transform import Rotation as R
 
 
-from .helpers.geometry.euclidian import buildCameraMatrix, get_plane_infos, get_z_line_equation, get_plane_line_intersection
+from .helpers.geometry.euclidian import buildCameraMatrix, get_plane_infos, get_z_line_equation, get_plane_line_intersection, get_alignment_coefficient
 from .helpers.geometry.orientation import rotateLandmarks
 
 # Get an instance of drawing specs to be used for drawing masks on hands
@@ -442,4 +442,39 @@ class Hand():
         
         return in_range
 
-        
+    # ======================== Hand specific functions ====
+    def getNbStraightFingers(self, min_align_coefficinet:np.float=0.5, min_align_coefficinet_for_thumb:np.float=0.8)->np.int:
+        """Gets the number of straight fingers
+
+        Args:
+            min_align_coefficinet (np.float, optional): The minimum alignement coefficient for the four fingers (except thumb). Defaults to 0.5.
+            min_align_coefficinet_for_thumb (np.float, optional): The minimum alignement coefficient for the thumb. Defaults to 0.5.
+
+        Returns:
+            np.int: number of straight fingers
+        """
+        thumb_stat = get_alignment_coefficient(self.get_landmarks_pos(self.thumb_landmark_indices))<min_align_coefficinet_for_thumb
+        index_stat = get_alignment_coefficient(self.get_landmarks_pos(self.index_landmark_indices))<min_align_coefficinet
+        middle_stat = get_alignment_coefficient(self.get_landmarks_pos(self.middle_landmark_indices))<min_align_coefficinet
+        ring_stat = get_alignment_coefficient(self.get_landmarks_pos(self.ring_landmark_indices))<min_align_coefficinet
+        pinky_stat = get_alignment_coefficient(self.get_landmarks_pos(self.pinky_landmark_indices))<min_align_coefficinet
+
+        return int(thumb_stat)+int(index_stat)+int(middle_stat)+int(ring_stat)+int(pinky_stat)
+
+    def getHandStatus(self, min_align_coefficinet:np.float=0.5, min_align_coefficinet_for_thumb:np.float=0.8)->np.int:
+        """Gets the number of straight fingers
+
+        Args:
+            min_align_coefficinet (np.float, optional): The minimum alignement coefficient for the four fingers (except thumb). Defaults to 0.5.
+            min_align_coefficinet_for_thumb (np.float, optional): The minimum alignement coefficient for the thumb. Defaults to 0.5.
+
+        Returns:
+            np.int: hand status 0 : closed, 1 : half opened, 2: completely opened
+        """
+        nb = self.getNbStraightFingers(min_align_coefficinet, min_align_coefficinet_for_thumb)
+        if nb == 0:
+            return 0
+        if nb < 5:
+            return 1
+        if nb == 5:
+            return 2

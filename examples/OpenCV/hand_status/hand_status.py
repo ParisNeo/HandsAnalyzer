@@ -15,12 +15,12 @@ from pathlib import Path
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # Build a window
-cv2.namedWindow('Fingers counter', flags=cv2.WINDOW_NORMAL)
-cv2.resizeWindow('Fingers counter', (640,480))
+cv2.namedWindow('Hand Status', flags=cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Hand Status', (640,480))
 
 # Build face analyzer while specifying that we want to extract just a single face
 ha = HandsAnalyzer(max_nb_hands=6)
-y,p,r=0,0,0
+hand_status_names = ["Closed","Half Closed","Opened"]
 # Main Loop
 while cap.isOpened():
     # Read image
@@ -31,18 +31,16 @@ while cap.isOpened():
     ha.process(image)
     # If there are some hands then process
     if ha.nb_hands>0:
-        total = 0
         for i in range(ha.nb_hands):
             hand = ha.hands[i]
             # Draw the landmarks
-            nb = hand.getNbStraightFingers()
+            hand.draw_landmarks(image, thickness=3)
+            status = hand.getHandStatus()
 
-            total += nb
-            hand.draw_bounding_box(image,text=f"left {nb}" if hand.is_left else f"right {nb}")
-        cv2.putText(image,f"Total:{total}",(10,30),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,0),1)
+            hand.draw_bounding_box(image,text=f"left {hand_status_names[status]}" if hand.is_left else f"right {hand_status_names[status]}")
     # Show the image
     try:
-        cv2.imshow('Fingers counter', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        cv2.imshow('Hand Status', cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     except Exception as ex:
         print(ex)
     

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """=== Face Analyzer Helpers =>
-    Module : helpers
+    Module : ui
     Author : Saifeddine ALOUI (ParisNeo)
     Licence : MIT
     Description :
